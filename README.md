@@ -11,7 +11,7 @@ This chart alternates between two deployments and services to enable going from 
 | `trackB.tag` | Image tag for track B | `v2.0.0`
 | `canaryEnabled` | Canary track enabled | `false`
 | `canaryWeight` | Ambassador weight for canary (1-100) | `25`
-| `replicaCpunt` | Total replicas between tracks, balanced between tracks by weight | `8`
+| `replicaCount` | Total replicas between tracks, balanced between tracks by weight | `8`
 
 
 
