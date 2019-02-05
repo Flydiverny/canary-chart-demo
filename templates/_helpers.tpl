@@ -34,8 +34,8 @@ Create chart name and version as used by the chart label.
 {{- define "canary-chart.weight" -}}
 {{- $values := (first .).Values -}}
 {{- $track := last . -}}
-{{- if $values.offTrackEnabled -}}
-{{- ternary (sub 100 $values.offTrackWeight) $values.offTrackWeight (eq $values.mainTrack $track) -}}
+{{- if $values.canaryEnabled -}}
+{{- ternary (sub 100 $values.canaryWeight) $values.canaryWeight (eq $values.mainTrack $track) -}}
 {{- else -}}
 {{- 100 -}}
 {{- end -}}

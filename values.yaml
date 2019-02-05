@@ -12,18 +12,11 @@ trackA:
 trackB:
   tag: v2.0.0
 
-mainTrack: "A"
-offTrackWeight: 25
-offTrackEnabled: true
+mainTrack: "B"
+canaryWeight: 25
+canaryEnabled: false
 replicaCount: 8
-
 
 service:
   type: ClusterIP
   port: 80
-
-ambassador:
-  enabled: false
-  path: /canary-chart/
-  hosts:
-    - chart-example.local

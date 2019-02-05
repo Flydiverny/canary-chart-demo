@@ -1,5 +1,5 @@
 {{- range tuple "A" "B" -}}
-{{- if or (eq $.Values.mainTrack .) $.Values.offTrackEnabled -}}
+{{- if or (eq $.Values.mainTrack .) $.Values.canaryEnabled -}}
 {{- $track := (pick $.Values (printf "track%s" .)) | values | first }}
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -17,6 +17,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "canary-chart.name" $ }}
       app.kubernetes.io/instance: {{ $.Release.Name }}
+      track: {{ . }}
   template:
     metadata:
       labels:
