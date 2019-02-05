@@ -1,6 +1,19 @@
-Example chart for how one could possibly implement a canary deployment with [ambassador](https://getambassador.io)
+# Read me
+Example chart for how one could possibly implement a canary deployment with [helm](https://helm.sh) and [ambassador](https://getambassador.io)
 
 This chart alternates between two deployments and services to enable going from one version to the next by moving traffic over in a canary fashion.
+
+
+| Parameter                       | Description                                | Default                                                    |
+| ------------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
+| `mainTrack` | Current main track | `A`
+| `trackA.tag` | Image tag for track A | `v1.0.0`
+| `trackB.tag` | Image tag for track B | `v2.0.0`
+| `canaryEnabled` | Canary track enabled | `false`
+| `canaryWeight` | Ambassador weight for canary (1-100) | `25`
+| `replicaCpunt` | Total replicas between tracks, balanced between tracks by weight | `8`
+
+
 
 ## Initial deploy
 By default canary deploy is disabled and track A is default.
@@ -41,12 +54,3 @@ helm template . \
   --set canaryWeight=25 \
   --set trackA.tag=v3.0.0 \
 ```
-
-| Parameter                       | Description                                | Default                                                    |
-| ------------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
-| `mainTrack` | Current main track | `A`
-| `trackA.tag` | Image tag for track A | `v1.0.0`
-| `trackB.tag` | Image tag for track B | `v2.0.0`
-| `canaryEnabled` | Canary track enabled | `false`
-| `canaryWeight` | Ambassador weight for canary (1-100) | `25`
-| `replicaCpunt` | Total replicas between tracks, balanced between tracks by weight | `8`
