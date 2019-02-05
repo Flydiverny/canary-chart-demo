@@ -9,23 +9,16 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
     getambassador.io/config: |
-      {{- if or (eq .Values.mainTrack "A") .Values.offTrackEnabled  }}
+      {{- range tuple "A" "B" -}}
+      {{- if or (eq $.Values.mainTrack .) $.Values.offTrackEnabled }}
       ---
       apiVersion: ambassador/v1
       kind: Mapping
-      name: {{ include "canary-chart.fullname" . }}_mapping-A
-      prefix: {{ .Values.ambassador.path  }}
-      service: {{ .Release.Name }}-a
-      weight: {{ include "canary-chart.weight" (tuple . "A") }}
+      name: {{ include "canary-chart.fullname" $ }}_mapping-A
+      prefix: {{ $.Values.ambassador.path  }}
+      service: {{ $.Release.Name }}-{{ . }}
+      weight: {{ include "canary-chart.weight" (tuple $ .) }}
       {{- end }}
-      {{- if or (eq .Values.mainTrack "B") .Values.offTrackEnabled }}
-      ---
-      apiVersion: ambassador/v1
-      kind: Mapping
-      name: {{ include "canary-chart.fullname" . }}_mapping-B
-      prefix: {{ .Values.ambassador.path  }}
-      service: {{ .Release.Name }}-b
-      weight: {{ include "canary-chart.weight" (tuple . "B") }}
       {{- end }}
 spec:
   type: {{ .Values.service.type }}
