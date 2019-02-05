@@ -1,0 +1,29 @@
+# Default values for canary-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: repo/app
+  pullPolicy: IfNotPresent
+
+trackA:
+  tag: v1.0.0
+
+trackB:
+  tag: v2.0.0
+
+mainTrack: "A"
+offTrackWeight: 25
+offTrackEnabled: true
+replicaCount: 8
+
+
+service:
+  type: ClusterIP
+  port: 80
+
+ambassador:
+  enabled: false
+  path: /canary-chart/
+  hosts:
+    - chart-example.local

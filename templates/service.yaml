@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "canary-chart.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "canary-chart.name" . }}
+    helm.sh/chart: {{ include "canary-chart.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    getambassador.io/config: |
+      {{- if or (eq .Values.mainTrack "A") .Values.offTrackEnabled  }}
+      ---
+      apiVersion: ambassador/v1
+      kind: Mapping
+      name: {{ include "canary-chart.fullname" . }}_mapping-A
+      prefix: {{ .Values.ambassador.path  }}
+      service: {{ .Release.Name }}-a
+      weight: {{ include "canary-chart.weight" (tuple . "A") }}
+      {{- end }}
+      {{- if or (eq .Values.mainTrack "B") .Values.offTrackEnabled }}
+      ---
+      apiVersion: ambassador/v1
+      kind: Mapping
+      name: {{ include "canary-chart.fullname" . }}_mapping-B
+      prefix: {{ .Values.ambassador.path  }}
+      service: {{ .Release.Name }}-b
+      weight: {{ include "canary-chart.weight" (tuple . "B") }}
+      {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "canary-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
