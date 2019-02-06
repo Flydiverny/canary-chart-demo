@@ -16,7 +16,7 @@ metadata:
     getambassador.io/config: |
       apiVersion: ambassador/v1
       kind: Mapping
-      name: {{ $fullName }}_mapping-A
+      name: {{ $fullName }}_mapping-{{ . }}
       prefix: /my-service/
       service: {{ $service }}
       weight: {{ include "canary-chart.weight" (tuple $ .) }}
